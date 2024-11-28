@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Important References")]
     private Rigidbody2D PlayerRb;
+    private Vector2 direction; 
 
-    // Bewegungsrichtung
     [HideInInspector] public float MovementDirection;
 
     [Header("Player Movement Settings")]
@@ -18,47 +19,59 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Player Gravity Settings")]
     public bool IsGrounded = true;
-    [SerializeField] private LayerMask groundLayer; // Layer für den Boden
-    [SerializeField] private Transform groundCheck; // Position, wo der Boden überprüft wird
-    [SerializeField] private float groundCheckRadius = 0.2f; // Radius für den Bodentest
+    [SerializeField] private LayerMask groundLayer; 
+    [SerializeField] private Transform groundCheck; 
+    [SerializeField] private float groundCheckRadius = 0.2f;
 
-    // Timer für die Gravitation
     [SerializeField] private float MaxGravityApplayer = 1f;
-    private float ApplyGravityAfter;
-    private bool gravityApplied = false; // Steuert, ob Gravitation bereits angewendet wurde
+    private float gravityWaitTime;
+    private bool gravityApplied = false; 
 
-    [SerializeField] private float jumpForce = 5f; // Sprungkraft
+    [Header("Dash-Player-System")]
+    [SerializeField] private float DashPower = 10f; 
+    [SerializeField] private float DashCooldown; 
+    public bool allowDash = true; 
+    private Coroutine DashCoroutine;
+
+    [Header("Jump_System")]
+    [SerializeField] private float jumpForce = 5f; 
 
     void Awake()
     {
         PlayerRb = GetComponent<Rigidbody2D>();
-        PlayerRb.gravityScale = 0f; // Keine Gravitation zu Beginn
-        ApplyGravityAfter = MaxGravityApplayer;
+        PlayerRb.gravityScale = 0f; 
+        gravityWaitTime = MaxGravityApplayer;
     }
 
     void Update()
     {
-        GetInputs(); // Eingaben abfragen
-        Clamps();
+        GetInputs(); // Bekomme spieler Inputs
+        Clamps(); // Clamepen von werten!
+
+        if (Input.GetMouseButtonDown(1) && Mathf.Abs(MovementDirection) > 0 && DashCoroutine == null && allowDash == true) //Wenn entwerde nach Links/Rechts, der Timer noch nichts getartet wurde und Recht-Klick gedrückt wird
+        {
+            StartCoroutine(DashSystem());
+            Debug.Log("Der Dash wurde gestartet");
+        }
     }
 
     void FixedUpdate()
     {
-        CheckGrounded(); // Überprüfen, ob der Spieler auf dem Boden steht
+        CheckGrounded(); //Der Spieler kann nur rennen wenn erlaubt!
 
-        if (allowWalking) // Bewegung erlauben
+        if (allowWalking) 
         {
             PlayerMovementMethod();
         }
 
-        if (!IsGrounded) // Spieler ist in der Luft
+        if (!IsGrounded) // Gravitation wird nur benutzt wenn der Spieler nicht auf den Boden ist
         {
-            Gravity(); // Gravitation nach Verzögerung anwenden
+            Gravity(); 
         }
-        else // Spieler ist am Boden
+        else // Andernfalls ist die schwerkraft immer auf 0
         {
-            PlayerRb.gravityScale = 0f; // Gravitation deaktivieren
-            gravityApplied = false; // Gravitation kann neu ausgelöst werden
+            PlayerRb.gravityScale = 0f; 
+            gravityApplied = false; 
         }
     }
 
@@ -66,9 +79,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void GetInputs()
     {
-        MovementDirection = Input.GetAxis("Horizontal");
+        MovementDirection = Input.GetAxisRaw("Horizontal"); 
 
-        // Sprung auslösen
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             Jump();
@@ -77,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Clamps()
     {
-        ApplyGravityAfter = Mathf.Clamp(ApplyGravityAfter, 0f, MaxGravityApplayer);
+        gravityWaitTime = Mathf.Clamp(gravityWaitTime, 0f, MaxGravityApplayer);
     }
 
     private void PlayerMovementMethod()
@@ -87,32 +99,29 @@ public class PlayerMovement : MonoBehaviour
         PlayerRb.velocity = newVelocity;
     }
 
-    private void Gravity()
+    private void Gravity() //Gravitation wird erst aktiviert wenn man zulange in der Luft ist, damit falls man springt nicht direkt die gravitation auf einen wirkt sondern erst wenn der Jump zu ende ist
     {
-        if (!gravityApplied) // Gravitation nur anwenden, wenn sie noch nicht aktiv ist
+        if (!gravityApplied) 
         {
-            ApplyGravityAfter -= 15f * Time.fixedDeltaTime;
+            gravityWaitTime -= 15f * Time.fixedDeltaTime;
 
-            if (ApplyGravityAfter <= 0f)
+            if (gravityWaitTime <= 0f)
             {
-                PlayerRb.gravityScale = 1f; // Gravitation aktivieren
+                PlayerRb.gravityScale = 1f; 
                 gravityApplied = true;
-                ApplyGravityAfter = MaxGravityApplayer; // Timer zurücksetzen
-                Debug.Log("Gravitation angewendet!");
+                gravityWaitTime = MaxGravityApplayer; 
             }
         }
     }
 
-    private void CheckGrounded()
+    private void CheckGrounded() //ist der Spieler auf dem Boden mit Oberlap.. 
     {
-        // Überprüft, ob der Spieler den Boden berührt
-        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer); 
     }
 
     private void Jump()
     {
-        PlayerRb.velocity = new Vector2(PlayerRb.velocity.x, jumpForce); // Nach oben springen
-        Debug.Log("Sprung ausgeführt!");
+        PlayerRb.velocity = new Vector2(PlayerRb.velocity.x, jumpForce); 
     }
 
     #endregion
@@ -122,4 +131,42 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.yellow; 
         Gizmos.DrawWireSphere(groundCheck.transform.position, groundCheckRadius);
     }
+
+
+    #region Courutines
+
+    private IEnumerator DashSystem()
+    {
+        if (Mathf.Abs(MovementDirection) < 0.1f)  // Keine Dash-Eingabe, wenn keine Bewegung
+        {
+            yield break;  // Frühzeitiger Abbruch der Coroutine
+        }
+
+        direction = new Vector2(MovementDirection, 0).normalized;
+
+        // Deaktiviert das Gehen während des Dashes
+        allowWalking = false;
+
+        // Setzt sofort die Dash-Geschwindigkeit
+        PlayerRb.velocity = direction * DashPower;
+
+        // Wartet für den DashCooldown
+        yield return new WaitForSeconds(DashCooldown);
+
+        // Sanftes Stoppen des Spielers
+        float lerpTime = 0.2f;
+        while (lerpTime > 0f)
+        {
+            lerpTime -= Time.deltaTime;
+            PlayerRb.velocity = Vector2.Lerp(PlayerRb.velocity, Vector2.zero, 0.2f);
+            yield return null;
+        }
+
+        // Erlaubt das Gehen wieder
+        allowWalking = true;
+
+        DashCoroutine = null;
+    }
+
+    #endregion
 }

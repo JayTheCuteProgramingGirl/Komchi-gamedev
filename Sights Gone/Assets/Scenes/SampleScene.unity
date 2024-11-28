@@ -588,7 +588,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 1
   m_SleepingMode: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &1618637484
 MonoBehaviour:
@@ -612,6 +612,9 @@ MonoBehaviour:
   groundCheck: {fileID: 872086326}
   groundCheckRadius: 0.3
   MaxGravityApplayer: 5
+  DashPower: 20
+  DashCooldown: 0.2
+  allowDash: 1
   jumpForce: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
