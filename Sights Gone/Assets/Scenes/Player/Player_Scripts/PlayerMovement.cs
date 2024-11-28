@@ -25,11 +25,16 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float MaxGravityApplayer = 1f;
     private float gravityWaitTime;
-    private bool gravityApplied = false; 
+    private bool gravityApplied = false;
+    //Hinzugefügt 28.11 um 20Uhr (BITTE DIESEN KOMMENTAR ENTFERNEN NACH LESEN DES GOOGLE DOC!!)
+    [Header("Input Buffers")]
+    [SerializeField] private float InputBufferTime = 2f;
+    private float InputBuffer;
 
     [Header("Dash-Player-System")]
     [SerializeField] private float DashPower = 10f; 
-    [SerializeField] private float DashCooldown; 
+    [SerializeField] private float DashCooldown;
+
     public bool allowDash = true; 
     private Coroutine DashCoroutine;
 
@@ -48,11 +53,13 @@ public class PlayerMovement : MonoBehaviour
         GetInputs(); // Bekomme spieler Inputs
         Clamps(); // Clamepen von werten!
 
-        if (Input.GetMouseButtonDown(1) && Mathf.Abs(MovementDirection) > 0 && DashCoroutine == null && allowDash == true) //Wenn entwerde nach Links/Rechts, der Timer noch nichts getartet wurde und Recht-Klick gedrückt wird
+        if (Input.GetMouseButtonDown(1) && Mathf.Abs(MovementDirection) > 0 && DashCoroutine == null && allowDash == true && InputBuffer < 0f) //Wenn entwerde nach Links/Rechts, der Timer noch nichts getartet wurde und Recht-Klick gedrückt wird und der InputBuffer "Cooldown" hattte
         {
+            InputBuffer = InputBufferTime;
             StartCoroutine(DashSystem());
             Debug.Log("Der Dash wurde gestartet");
         }
+        else { InputBuffer -= Time.deltaTime; }
     }
 
     void FixedUpdate()
@@ -133,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    #region Courutines
+    #region Corutines
 
     private IEnumerator DashSystem()
     {
