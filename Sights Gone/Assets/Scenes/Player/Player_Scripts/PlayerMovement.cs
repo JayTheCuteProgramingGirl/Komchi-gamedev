@@ -153,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if(isJumping == true && PlayerRb.velocity.y < 0f) //Wenn er aktuell springt
+        if(PlayerRb.velocity.y < 0f) //Wenn er aktuell springt
         {
            PlayerRb.gravityScale = gravityJumpMultiplierer; //Schwerkraft erhört 
         }

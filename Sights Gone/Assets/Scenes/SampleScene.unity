@@ -652,11 +652,11 @@ MonoBehaviour:
   PlayerPosition: {fileID: 872086325}
   offset: {x: 0, y: 1, z: -10}
   CameraSpeed: 0.125
-  movementCooldown: 0.5
-  minX: -5
-  maxX: 5
-  minY: -5
-  maxY: 5
+  movementCooldown: 1
+  minX: -2.5
+  maxX: 2.5
+  minY: -2.5
+  maxY: 2.5
 --- !u!1 &578729788
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,7 +992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowWalking: 1
-  PlayerWalkingSpeed: 4
+  PlayerWalkingSpeed: 5
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
