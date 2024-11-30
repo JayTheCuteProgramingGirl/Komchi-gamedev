@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Azim : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [Header("Important-References")]
+    [SerializeField] private float EnemySpeed = 2f; 
+    public GameObject PlayerPosition; 
     void Start()
     {
         
@@ -12,6 +14,15 @@ public class Azim : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {
+        GetDate();
+    }
+    
+    private void FollowPlayer()
+    {
+        
+    }
+    private void GetDate()
     {
         
     }
