@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D PlayerRb;
     private Vector2 direction; 
 
-    [HideInInspector] public float MovementDirection;
+    [HideInInspector] public static float MovementDirection;
 
     [Header("Player Movement Settings")]
     [HideInInspector] public bool allowWalking = true;
@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [Space(10f)]
 
     [Header("Player Gravity Settings")]
-    public bool IsGrounded = true;
+    public static bool IsGrounded = true;
     [SerializeField] private LayerMask groundLayer; 
     [SerializeField] private Transform groundCheck; 
     [SerializeField] private float groundCheckRadius = 0.2f;
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float MaxGravityApplayer = 1f;
     private float gravityWaitTime;
     private bool gravityApplied = false;
-    //Hinzugefügt 28.11 um 20Uhr (BITTE DIESEN KOMMENTAR ENTFERNEN NACH LESEN DES GOOGLE DOC!!)
+
     [Header("Input Buffers")]
     [SerializeField] private float InputBufferTime = 2f;
     private float InputBuffer;
@@ -40,7 +40,12 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Jump_System")]
     [SerializeField] private float jumpForce = 5f; 
+    [SerializeField] private float maxHoldTime = 0.1f; // Maximale Zeit, in der die Sprunghöhe erhöht wird
+    [SerializeField] private float maxJumpHeight = 6f; //Maximale Sprung höhe; 
+    [SerializeField] private float gravityJumpMultiplierer = 2f; //Die Gravitation wir erhört wenn der Spieler runter fällt nach einem Sprung
 
+    private bool isJumping = false; 
+    private float JumpTimeCounter = 1.0f; //Der Timer der zählt wie lange der Spieler schon auf den Boden ist
     void Awake()
     {
         PlayerRb = GetComponent<Rigidbody2D>();
@@ -52,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GetInputs(); // Bekomme spieler Inputs
         Clamps(); // Clamepen von werten!
-
+        Jump(); //Jump wird genutzt; 
+ 
         if (Input.GetMouseButtonDown(1) && Mathf.Abs(MovementDirection) > 0 && DashCoroutine == null && allowDash == true && InputBuffer < 0f) //Wenn entwerde nach Links/Rechts, der Timer noch nichts getartet wurde und Recht-Klick gedrückt wird und der InputBuffer "Cooldown" hattte
         {
             InputBuffer = InputBufferTime;
@@ -87,10 +93,37 @@ public class PlayerMovement : MonoBehaviour
     private void GetInputs()
     {
         MovementDirection = Input.GetAxisRaw("Horizontal"); 
+    }
 
-        if (Input.GetButtonDown("Jump") && IsGrounded)
+    private void Jump() //Methode fürs Springen, in Update!
+    {
+        if (Input.GetButtonDown("Jump") && IsGrounded == true) // Wenn die Sprungtaste gedrückt wird, und der Spieler auf den Boden ist
         {
-            Jump();
+            PlayerRb.velocity = new Vector2(PlayerRb.velocity.x, jumpForce);
+            isJumping = true; // Der Spieler springt
+            JumpTimeCounter = maxHoldTime; // Timer zurücksetzen
+        }
+
+        if (Input.GetButton("Jump") && isJumping == true) // Wenn die Sprungtaste gehalten wird und der Spieler noch springen kann
+        {
+            if (JumpTimeCounter > 0)
+            {
+
+                float currentYVelocity = PlayerRb.velocity.y;
+                float newYVelocity = Mathf.Lerp(currentYVelocity, maxJumpHeight, 0.1f); // 0.1f = Interpolationsrate, kann erhört werden wenn du willst jay, kannst gerne dazu eine vaiabel erstellen
+                PlayerRb.velocity = new Vector2(PlayerRb.velocity.x, newYVelocity);
+
+                JumpTimeCounter -= Time.deltaTime; // Zeit runterzählen
+            }
+            else
+            {
+                isJumping = false;
+            }
+        }
+
+        if (Input.GetButtonUp("Jump")) // Wenn die Sprungtaste losgelassen wird
+        {
+            isJumping = false; // Spieler stoppt der Sprung
         }
     }
 
@@ -119,6 +152,12 @@ public class PlayerMovement : MonoBehaviour
                 gravityWaitTime = MaxGravityApplayer; 
             }
         }
+
+        if(isJumping == true && PlayerRb.velocity.y < 0f) //Wenn er aktuell springt
+        {
+           PlayerRb.gravityScale = gravityJumpMultiplierer; //Schwerkraft erhört 
+        }
+  
     }
 
     private void CheckGrounded() //ist der Spieler auf dem Boden mit Oberlap.. 
@@ -126,10 +165,7 @@ public class PlayerMovement : MonoBehaviour
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer); 
     }
 
-    private void Jump()
-    {
-        PlayerRb.velocity = new Vector2(PlayerRb.velocity.x, jumpForce); 
-    }
+ 
 
     #endregion
 
