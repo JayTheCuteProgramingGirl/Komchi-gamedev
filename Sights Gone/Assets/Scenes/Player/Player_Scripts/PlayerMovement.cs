@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public static float MovementDirection;
 
     [Header("Player Movement Settings")]
-    [HideInInspector] public bool allowWalking = true;
+    [HideInInspector] public static bool allowWalking = true;
     [SerializeField] private float PlayerWalkingSpeed;
 
     [Space(10f)]
@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxJumpHeight = 6f; //Maximale Sprung höhe; 
     [SerializeField] private float gravityJumpMultiplierer = 2f; //Die Gravitation wir erhört wenn der Spieler runter fällt nach einem Sprung
 
+
     private bool isJumping = false; 
     private float JumpTimeCounter = 1.0f; //Der Timer der zählt wie lange der Spieler schon auf den Boden ist
     void Awake()
@@ -63,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
         {
             InputBuffer = InputBufferTime;
             StartCoroutine(DashSystem());
-            Debug.Log("Der Dash wurde gestartet");
+
         }
         else { InputBuffer -= Time.deltaTime; }
     }
@@ -164,8 +165,6 @@ public class PlayerMovement : MonoBehaviour
     {
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer); 
     }
-
- 
 
     #endregion
 
