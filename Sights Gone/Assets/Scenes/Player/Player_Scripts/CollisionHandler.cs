@@ -56,6 +56,7 @@ public class CollisionHandler : MonoBehaviour
 
             // Wende den Knockback an
             playerRB.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
+            PlayerHealthSystem.currentHealth -= Azim.NormalAttackDamage; //Reduzier Leben vom Spieler
 
             // Setze den Spieler nach der Knockback-Dauer zurück
             StartCoroutine(ResetKnockback());
