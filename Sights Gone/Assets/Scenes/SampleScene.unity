@@ -1087,7 +1087,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &976828311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1496,7 +1496,7 @@ MonoBehaviour:
   MaxGravityApplayer: 5
   InputBufferTime: 2
   DashPower: 20
-  DashCooldown: 0.1
+  DashDuration: 0
   allowDash: 1
   jumpForce: 3
   maxHoldTime: 0.5

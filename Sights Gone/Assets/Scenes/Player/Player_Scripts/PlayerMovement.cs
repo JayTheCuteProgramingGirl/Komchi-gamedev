@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Dash-Player-System")]
     [SerializeField] private float DashPower = 10f; 
-    [SerializeField] private float DashCooldown;
+    [SerializeField] private float DashDuration;
 
     public bool allowDash = true; 
     [HideInInspector] public static bool iscurrentlyDashing = false; // Ist der Spieler gerade am Dashen
@@ -195,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerRb.velocity = direction * DashPower;
 
         // Wartet für den DashCooldown
-        yield return new WaitForSeconds(DashCooldown);
+        yield return new WaitForSeconds(DashDuration);
 
         // Sanftes Stoppen des Spielers
         float lerpTime = 0.2f;
