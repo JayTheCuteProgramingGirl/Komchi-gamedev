@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float DashCooldown;
 
     public bool allowDash = true; 
+    [HideInInspector] public static bool iscurrentlyDashing = false; // Ist der Spieler gerade am Dashen
     private Coroutine DashCoroutine;
 
     [Header("Jump_System")]
@@ -154,10 +155,11 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if(PlayerRb.velocity.y < 0f) //Wenn er aktuell springt
+        if (PlayerRb.velocity.y < 0f) // Wenn der Spieler nach unten fällt
         {
-           PlayerRb.gravityScale = gravityJumpMultiplierer; //Schwerkraft erhört 
+            PlayerRb.gravityScale = Mathf.Lerp(PlayerRb.gravityScale, gravityJumpMultiplierer, 0.1f); // Sanfte Erhöhung der Schwerkraft
         }
+
   
     }
 
@@ -183,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
         {
             yield break;  // Frühzeitiger Abbruch der Coroutine
         }
-
+        iscurrentlyDashing = true; //Der Spieler Dasht gerade
         direction = new Vector2(MovementDirection, 0).normalized;
 
         // Deaktiviert das Gehen während des Dashes
@@ -206,8 +208,8 @@ public class PlayerMovement : MonoBehaviour
 
         // Erlaubt das Gehen wieder
         allowWalking = true;
-
-        DashCoroutine = null;
+        iscurrentlyDashing = false;  //Der Spieler Dasht nicht mehr
+        DashCoroutine = null; //Courutine Referenz zurückk!
     }
 
     #endregion

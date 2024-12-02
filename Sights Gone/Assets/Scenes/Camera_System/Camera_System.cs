@@ -23,6 +23,11 @@ public class Camera_System : MonoBehaviour
     public float minY = -5f;
     public float maxY = 5f;
 
+    [Header("Change-POV")]
+    [SerializeField] private float minPOV = 60f; 
+    [SerializeField] private float MaxPOV = 70f; 
+    [SerializeField] private float LerpStrenght; 
+
     void Start()
     {
     }
@@ -32,6 +37,7 @@ public class Camera_System : MonoBehaviour
         FollowPlayer();
         NavigateCamera();
         GetData();
+        ChangePOV();
     }
 
     private void FollowPlayer()
@@ -75,5 +81,17 @@ public class Camera_System : MonoBehaviour
     {
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
+    }
+
+    private void ChangePOV()
+    {
+        if(PlayerMovement.iscurrentlyDashing == true)
+        {
+            Camera.main.fieldOfView = Mathf.Lerp(minPOV, MaxPOV, LerpStrenght); //Langsam die Kamera sicht vergösßern 
+        }
+        else 
+        {
+            Camera.main.fieldOfView = Mathf.Lerp(MaxPOV, minPOV, LerpStrenght); //Kamerea sicht verleiner 
+        }
     }
 }

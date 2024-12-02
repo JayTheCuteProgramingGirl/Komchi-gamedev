@@ -12,7 +12,7 @@ public class Azim : MonoBehaviour
     [SerializeField] private float jumpBackPower = 5f; 
     [SerializeField] private float minimumPlayerDistance;
     [SerializeField] private float enemyMoveSpeed = 3f; 
-    public static float NormalAttackDamage = 100f; 
+    [SerializeField] public static float NormalAttackDamage = 25f; 
     public float timerForFollowPlayer = 2f; 
     private bool hasJumpedBack = false;
 

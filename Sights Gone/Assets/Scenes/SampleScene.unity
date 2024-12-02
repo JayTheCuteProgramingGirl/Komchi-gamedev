@@ -855,7 +855,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -907,6 +907,9 @@ MonoBehaviour:
   maxX: 2.5
   minY: -2.5
   maxY: 2.5
+  minPOV: 60
+  MaxPOV: 70
+  LerpStrenght: 0.6
 --- !u!1 &578729788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1087,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &976828311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1493,9 +1496,9 @@ MonoBehaviour:
   MaxGravityApplayer: 5
   InputBufferTime: 2
   DashPower: 20
-  DashCooldown: 0.2
+  DashCooldown: 0.1
   allowDash: 1
-  jumpForce: 4
+  jumpForce: 3
   maxHoldTime: 0.5
   maxJumpHeight: 6
   gravityJumpMultiplierer: 2.5
