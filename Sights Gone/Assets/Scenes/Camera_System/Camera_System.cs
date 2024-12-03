@@ -6,6 +6,7 @@ public class Camera_System : MonoBehaviour
 {
     [Header("Important-References")]
     public GameObject PlayerPosition;
+    public Camera Camera;
     public Vector3 offset;
     private float mouseX;
     private float mouseY;
@@ -58,10 +59,10 @@ public class Camera_System : MonoBehaviour
             if (timeSinceMovement >= movementCooldown)
             {
                 allowFollowPlayer = false;
-                Vector3 newPosition = new Vector3(transform.position.x + mouseX, transform.position.y + mouseY, transform.position.z);
+                Vector3 newPosition = new Vector3(Camera.transform.localPosition.x + mouseX, Camera.transform.localPosition.y + mouseY, Camera.transform.localPosition.z);
 
-                newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
-                newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+                newPosition.x = Mathf.Clamp(newPosition.x, Camera.transform.position.x + minX, Camera.transform.position.x + maxX);
+                newPosition.y = Mathf.Clamp(newPosition.y, Camera.transform.position.y + minY, Camera.transform.position.y + maxY);
 
                 transform.position = newPosition;
             }

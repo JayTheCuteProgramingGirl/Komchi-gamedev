@@ -193,6 +193,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Boden Sprite_4
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7df44464cbceec848a0e14f8f3f54c79
+      internalID: 413551704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -208,6 +229,7 @@ TextureImporter:
       Boden Sprite_1: 1415019160
       Boden Sprite_2: 134862121
       Boden Sprite_3: 1390284054
+      Boden Sprite_4: 413551704
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
