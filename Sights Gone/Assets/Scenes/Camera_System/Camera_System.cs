@@ -61,8 +61,8 @@ public class Camera_System : MonoBehaviour
                 allowFollowPlayer = false;
                 Vector3 newPosition = new Vector3(Camera.transform.localPosition.x + mouseX, Camera.transform.localPosition.y + mouseY, Camera.transform.localPosition.z);
 
-                newPosition.x = Mathf.Clamp(newPosition.x, Camera.transform.position.x + minX, Camera.transform.position.x + maxX);
-                newPosition.y = Mathf.Clamp(newPosition.y, Camera.transform.position.y + minY, Camera.transform.position.y + maxY);
+                newPosition.x = Mathf.Clamp(newPosition.x, Camera.transform.position.x, Camera.transform.position.x);
+                newPosition.y = Mathf.Clamp(newPosition.y, Camera.transform.position.y, Camera.transform.position.y);
 
                 transform.position = newPosition;
             }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - EnemySpider
+  - Enemy
   layers:
   - Default
   - TransparentFX

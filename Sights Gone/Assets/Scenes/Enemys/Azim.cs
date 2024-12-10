@@ -15,7 +15,9 @@ public class Azim : MonoBehaviour
     [SerializeField] public static float NormalAttackDamage = 25f; 
     public float timerForFollowPlayer = 2f; 
     private bool hasJumpedBack = false;
-
+    //----!Temporär!----\\
+    public int Health = 50;
+    //----!Temporär!----\\
     void Awake()
     {
         enemyRb = GetComponent<Rigidbody2D>();
