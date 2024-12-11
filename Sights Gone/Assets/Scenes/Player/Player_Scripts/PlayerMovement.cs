@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
         //NICHT LÖSCHEN WICHTIGE LOGIC FÜR SPIELER ATTACKE!!--
         AttackBuffer -= Time.deltaTime;                                                  //Lässt den AttackBuffer runter zählen
         ComboBuffer -= Time.deltaTime;                                                   //Lässt den ComboBuffer runter zählen
-        //NICHT LÖSCHEN WICHTIGE LOGIC FÜR SPIELER ATTACKE!!--
+        //NICHT LÖSCHEN WICHTIGE LOGIC FÜR SPIELER ATTACKE!!---
     }
     #endregion
 
