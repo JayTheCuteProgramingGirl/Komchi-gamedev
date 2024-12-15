@@ -33,7 +33,7 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    private Vector2 GetKnockbackDirection()
+    public Vector2 GetKnockbackDirection()
     {
         // Vertauschte Logik für die Knockback-Richtung
         // Wenn der Spieler links von der Spinne ist, wird er nach rechts gestoßen
@@ -48,7 +48,7 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    private void ApplyKnockback(Vector2 direction)
+    public void ApplyKnockback(Vector2 direction)
     {
         if (!isKnockedBack) // Verhindert mehrfachen Knockback während der Dauer
         {

@@ -31,10 +31,6 @@ public class PlayerMovement : MonoBehaviour
     [Header("Input Buffers")]
     [SerializeField] private float InputBufferTime = 2f;    //Input buffer für den Dash
     private float InputBuffer;
-    [SerializeField] private float AttackBufferTime = 2f;   //Attacke buffer (falls keine combo entsteht oder am ende einer combo)
-    private float AttackBuffer;
-    [SerializeField] private float ComboBufferTime = 2f;    //Wie viel zeit der spieler hat zwischen den ersten hit um zu entscheiden ob es eine Combo wird
-    private float ComboBuffer;
     //----//
     [Header("Dash-Player-System")]
     [SerializeField] private float DashPower = 10f; 
@@ -49,10 +45,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxHoldTime = 0.1f; // Maximale Zeit, in der die Sprunghöhe erhöht wird
     [SerializeField] private float maxJumpHeight = 6f; //Maximale Sprung höhe; 
     [SerializeField] private float gravityJumpMultiplierer = 2f; //Die Gravitation wir erhört wenn der Spieler runter fällt nach einem Sprung
-    //----//
-    [Header("Attack-Player-System")]
-    public int Damage;
-    bool Combo_Available; //nicht in benutzung momentan
     //----//
     private bool isJumping = false; 
     private float JumpTimeCounter = 1.0f; //Der Timer der zählt wie lange der Spieler schon auf den Boden ist
@@ -84,21 +76,11 @@ public class PlayerMovement : MonoBehaviour
         else { InputBuffer -= Time.deltaTime; }
 
 
-        //NICHT LÖSCHEN WICHTIGE LOGIC FÜR SPIELER ATTACKE!!--
-        AttackBuffer -= Time.deltaTime;                                                  //Lässt den AttackBuffer runter zählen
-        ComboBuffer -= Time.deltaTime;                                                   //Lässt den ComboBuffer runter zählen
-        //NICHT LÖSCHEN WICHTIGE LOGIC FÜR SPIELER ATTACKE!!---
+
     }
     #endregion
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if(Input.GetMouseButtonDown(0) &&  other.tag == "Enemy" && AttackBuffer < 0f)   //Checkt ob der Spieler Links-Click drückt und das das in der "Attack-Zone" ein Gegner ist und der Buffer nicht greift
-        {                                                                               //-----//
-            AttackBuffer = AttackBufferTime;                                            //Aktiviert den AttackBuffer
-            Single_Attack_Player(other);                                                //Ruft die Single_Attack_Player(); methode in der "Attack Logic" region auf und gibt dieser den getroffenen Gegner
-        }                                                                               //-----//                                        
-    }
+    
 
     #region Fixed Update
     void FixedUpdate()
@@ -243,22 +225,6 @@ public class PlayerMovement : MonoBehaviour
         iscurrentlyDashing = false;  //Der Spieler Dasht nicht mehr
         DashCoroutine = null; //Courutine Referenz zurückk!
     }
-
-    #endregion
-
-    #region Attack Logic
-
-    private void Single_Attack_Player(Collider2D Enemy)
-    {
-        Azim Enemy_Script = Enemy.GetComponent<Azim>();                                 //Nimmt von dem Gegener das script und speicher deis als Enemy_Scipt in dieser Methode
-                                                                                        //----//
-        Enemy_Script.Health -= Damage;                                                  //Zieht von dem Gegner Health Damage ab
-                                                                                        //----//
-        //Debug.Log(Enemy_Script.Health);                                               //Noch zu Löschen
-    }
-
-
-
 
     #endregion
 }

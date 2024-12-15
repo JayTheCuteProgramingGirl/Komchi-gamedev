@@ -12,7 +12,8 @@ public class Azim : MonoBehaviour
     [SerializeField] private float jumpBackPower = 5f; 
     [SerializeField] private float minimumPlayerDistance;
     [SerializeField] private float enemyMoveSpeed = 3f; 
-    [SerializeField] public static float NormalAttackDamage = 25f; 
+    [SerializeField] public static float NormalAttackDamage = 25f;
+    [SerializeField] private int Damage = 50;
     public float timerForFollowPlayer = 2f; 
     private bool hasJumpedBack = false;
     //----!Temporär!----\\
@@ -26,16 +27,18 @@ public class Azim : MonoBehaviour
     void Update()
     {
         distanceToPlayer = Vector2.Distance(transform.position, playerPosition.transform.position); // Berechnung des Abstands
-        HandleJumpBack();
     }
 
     void FixedUpdate()
     {
+        HandleJumpBack();
         FollowPlayer();
+        if(Health <= 0 ) { Destroy(this.gameObject); }
     }
 
     private void HandleJumpBack()
     {
+
         if (distanceToPlayer < minimumPlayerDistance && !hasJumpedBack)
         {
             direction = (transform.position.x > playerPosition.transform.position.x) ? Vector2.right : Vector2.left;
@@ -43,6 +46,15 @@ public class Azim : MonoBehaviour
             enemyRb.AddForce(direction * jumpBackPower, ForceMode2D.Impulse); // Gegner springt zurück
 
             hasJumpedBack = true;
+
+            PlayerHealthSystem.currentHealth -= Damage;
+
+            //PlayerMovement.allowWalking = false;
+
+            //Vector2 knockbackDirection = CollisionHandler.GetKnockbackDirection();
+
+            //CollisionHandler.ApplyKnockback(knockbackDirection);
+
         }
     }
 

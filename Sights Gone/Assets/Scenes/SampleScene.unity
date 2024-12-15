@@ -1175,10 +1175,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPosition: {fileID: 872086325}
-  distanceToPlayer: 0
+  distanceToPlayer: -0.99
   jumpBackPower: 5
   minimumPlayerDistance: 4
   enemyMoveSpeed: 3
+  Damage: 50
   timerForFollowPlayer: 2
   Health: 50
 --- !u!61 &976828312
@@ -1413,7 +1414,8 @@ GameObject:
   - component: {fileID: 1618637484}
   - component: {fileID: 1618637485}
   - component: {fileID: 1618637486}
-  - component: {fileID: 1618637487}
+  - component: {fileID: 1618637488}
+  - component: {fileID: 1618637489}
   m_Layer: 0
   m_Name: Spieler
   m_TagString: Player
@@ -1571,8 +1573,6 @@ MonoBehaviour:
   groundCheckRadius: 0.3
   MaxGravityApplayer: 5
   InputBufferTime: 2
-  AttackBufferTime: 2
-  ComboBufferTime: 2
   DashPower: 20
   DashDuration: 0
   allowDash: 1
@@ -1580,7 +1580,6 @@ MonoBehaviour:
   maxHoldTime: 0.5
   maxJumpHeight: 6
   gravityJumpMultiplierer: 2.5
-  Damage: 15
 --- !u!114 &1618637485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1607,8 +1606,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96199797003f55d45b660ababca8751a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &1618637487
-BoxCollider2D:
+--- !u!114 &1618637488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618637479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e614c378d7ee88a4793b6f2ee6c6bd7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 50
+  AttackBufferTime: 2
+  ComboBufferTime: 2
+  Range: 3
+--- !u!58 &1618637489
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1639,19 +1654,9 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.9429451, y: 0.11564422}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 2}
-    newSize: {x: 1, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1.8895714, y: 1.7687116}
-  m_EdgeRadius: 0
+  m_Radius: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
